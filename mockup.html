@@ -1,0 +1,63 @@
+<!DOCTYPE HTML> 
+<head>
+	<link rel = "stylesheet" href = "css.css">
+	<title> Placeholder name</title>
+</head>
+<script> 
+	function updateFacs() {
+		let list = document.getElementById("faction");
+		let game = document.getElementById("game");
+		if (game.value == "40k") {
+			list.innerHTML = "<option> Tau </option>"
+			+ "<option> Space Marines </option>";
+		}
+		else if (game.value == "warmachine") {
+			list.innerHTML = "<option> Cygnar </option>"
+			+ "<option> Orgoth </option>";
+		}
+		else {
+			list.innerHTML = "<option></option>";
+		}
+	}
+</script>
+<body>
+	<header>
+		<h1> PlaceHolder name</h1>
+	</header>
+	<nav>
+		<p>How to use </p>
+		<p><a href = "mockup.html">List creator</a></p>
+		<p>Statistical Calculator</p>
+	</nav>
+	
+	<article class = "in" onClick = "updateFacs()">
+		<label for = "game"> Select Game System </label>
+			<select name = "game" id = "game">
+				<option></option>
+				<option value = "40k">40k</option>
+				<option value = "warmachine">Warmachine</option>
+			</select>
+	</article>
+	
+	<article class =  "in">
+		<label for = "faction"> Faction </label>
+			<select name = "faction" id = "faction">
+				<option></option>
+			</select>
+	</article>
+	
+	<article>
+		<table>
+			<table>
+				<tr>
+					<th> Model name </th>
+					<th> HP </th>
+					<th> Strength </th>
+					<th> Accuracy </th>
+					<th> Attacks </th>
+				</tr>
+			</table>
+		</table>
+	</article>
+</body>
+

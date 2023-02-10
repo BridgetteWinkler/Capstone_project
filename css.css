@@ -1,0 +1,46 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+header {
+	background-color: Lightgray;
+	margin: 0px;
+	padding: 0px;
+}
+
+head {
+	margin: 0px;
+}
+
+body{
+	margin: 0;
+	padding: 0;
+}
+
+nav {
+	background-color: Lightgray;
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+nav > p {
+	display: inline;
+	float: 30px;
+	border-left: 2px solid black;
+}
+
+article {
+	padding: 20px;
+}
+
+th, td{
+	border: 2px solid black;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.in {
+	display: inline;
+	margin-top: 10px;
+}
+
