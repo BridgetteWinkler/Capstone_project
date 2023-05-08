@@ -83,7 +83,7 @@ class Unit {
                         if (points + attachments[index].points <= limit)
                           {
                             points += attachments[index].points,
-                            attachmentString += '$attachname ',
+                            attachmentString += '$attachname, ',
                           }
                       },
                   trailing: IconButton(
@@ -91,9 +91,11 @@ class Unit {
                     splashRadius: 20,
                     icon: const Icon(Icons.close),
                     onPressed: () {
-                      points -= attachments[index].points;
-                      attachmentString.replaceFirst(attachname, '');
-                      attachmentString.replaceFirst(',', '');
+                      if (attachmentString.contains(attachname)) {
+                        points -= attachments[index].points;
+                        attachmentString.replaceFirst(attachname, '');
+                        attachmentString.replaceFirst(',', '');
+                      }
                     },
                   ));
             });
@@ -388,7 +390,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemBuilder: (BuildContext context, int index) {
                   return Center(
                       child: ListTile(
-                    hoverColor: Colors.red,
+                    hoverColor: const Color.fromARGB(255, 233, 107, 98),
                     title: Center(
                       child: RichText(
                           text: TextSpan(text: widget.list[index].toString())),
