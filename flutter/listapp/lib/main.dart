@@ -330,111 +330,123 @@ class _MyHomePageState extends State<MyHomePage> {
           )),
       body: Column(children: <Widget>[
         Text("units in $facname\n"),
-        SizedBox(
-            height: ((MediaQuery.of(context).size.height) / 10) * 4,
-            child: StreamBuilder<QuerySnapshot>(
-              stream: units,
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return const Center(child: Text("Error"));
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: Text("Loading"));
-                }
-                final data = snapshot.data;
+        Center(
+          child: ConstrainedBox(
+            constraints:
+                BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            child: SizedBox(
+              height: ((MediaQuery.of(context).size.height) / 10) * 4,
+              child: StreamBuilder<QuerySnapshot>(
+                stream: units,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Error"));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: Text("Loading"));
+                  }
+                  final data = snapshot.data;
 
-                return ListView.builder(
-                    itemCount: data?.size,
-                    itemBuilder: (BuildContext context, int index) {
-                      //Creating the unit object and adding it to the array of units
-                      widget.units.add(Unit(data!.docs[index], stats, index));
-                      return Center(
-                          child: ListTile(
-                              key: Key(data.docs[index]['name']),
-                              title: Center(
-                                  child: RichText(
-                                      //Color for the text suddenly became red without this line.
-                                      selectionColor: Colors.black,
-                                      text: TextSpan(
-                                          text:
-                                              widget.units[index].toString()))),
-                              onTap: () => {
-                                    setState(() {
-                                      addUnit(index);
-                                      updateListWidget(gamename, facname);
-                                    })
-                                  }));
-                    });
-              },
-            )),
+                  return ListView.builder(
+                      itemCount: data?.size,
+                      itemBuilder: (BuildContext context, int index) {
+                        //Creating the unit object and adding it to the array of units
+                        widget.units.add(Unit(data!.docs[index], stats, index));
+                        return Center(
+                            child: ListTile(
+                                key: Key(data.docs[index]['name']),
+                                title: Center(
+                                    child: RichText(
+                                        //Color for the text suddenly became red without this line.
+                                        selectionColor: Colors.black,
+                                        text: TextSpan(
+                                            text: widget.units[index]
+                                                .toString()))),
+                                onTap: () => {
+                                      setState(() {
+                                        addUnit(index);
+                                        updateListWidget(gamename, facname);
+                                      })
+                                    }));
+                      });
+                },
+              ),
+            ),
+          ),
+        ),
         //This SizedBox is displaying the units in the list.
         const Text("Currently Selected Units"),
-        SizedBox(
-          height: ((MediaQuery.of(context).size.height) / 10) * 2.5,
-          child: ListView.builder(
-            itemCount: widget.list.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Center(
-                  child: ListTile(
-                hoverColor: Colors.red,
-                title: Center(
-                  child: RichText(
-                      text: TextSpan(text: widget.list[index].toString())),
-                ),
-                //Removing the clicked unit from the list, above hover color is red as a warning.
-                onTap: () => {
-                  setState(() {
-                    removeUnit(index);
-                    updateListWidget(gamename, facname);
-                  })
+        Center(
+          child: ConstrainedBox(
+            constraints:
+                BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            child: SizedBox(
+              height: ((MediaQuery.of(context).size.height) / 10) * 2.5,
+              child: ListView.builder(
+                itemCount: widget.list.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Center(
+                      child: ListTile(
+                    hoverColor: Colors.red,
+                    title: Center(
+                      child: RichText(
+                          text: TextSpan(text: widget.list[index].toString())),
+                    ),
+                    //Removing the clicked unit from the list, above hover color is red as a warning.
+                    onTap: () => {
+                      setState(() {
+                        removeUnit(index);
+                        updateListWidget(gamename, facname);
+                      })
+                    },
+                    //This button displays the unit's attachments.
+                    trailing: IconButton(
+                      hoverColor: const Color.fromARGB(255, 116, 116, 116),
+                      splashRadius: 20,
+                      icon: const Icon(Icons.add_circle_outline),
+                      onPressed: /*This method will display the unit's attachments*/
+                          () => {
+                        setState(() {
+                          String unitName = widget.list[index].name;
+                          showDialog(
+                              context: context,
+                              builder: (builder) => AlertDialog(
+                                    content: Text("Attachments for $unitName"),
+                                    actions: [
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall,
+                                        ),
+                                        child: const Text('Close'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          updateListWidget(gamename, facname);
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                100 *
+                                                25,
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        child: (widget.list[index]
+                                            .listAttachments(gamename, facname,
+                                                unitName, db, widget.limit)),
+                                      )
+                                    ],
+                                  ));
+                        })
+                      },
+                    ),
+                  ));
                 },
-                //This button displays the unit's attachments.
-                trailing: IconButton(
-                  hoverColor: const Color.fromARGB(255, 116, 116, 116),
-                  splashRadius: 20,
-                  icon: const Icon(Icons.add_circle_outline),
-                  onPressed: /*This method will display the unit's attachments*/
-                      () => {
-                    setState(() {
-                      String unitName = widget.list[index].name;
-                      showDialog(
-                          context: context,
-                          builder: (builder) => AlertDialog(
-                                content: Text("Attachments for $unitName"),
-                                actions: [
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall,
-                                    ),
-                                    child: const Text('Close'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      updateListWidget(gamename, facname);
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height /
-                                        100 *
-                                        25,
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
-                                    child: (widget.list[index].listAttachments(
-                                        gamename,
-                                        facname,
-                                        unitName,
-                                        db,
-                                        widget.limit)),
-                                  )
-                                ],
-                              ));
-                    })
-                  },
-                ),
-              ));
-            },
+              ),
+            ),
           ),
         )
       ]),
@@ -490,7 +502,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ]));
       return;
     } else {
-      //TODO: test clone
       widget.list.add(widget.units[index].clone());
       widget.points += widget.units[index].points;
       widget.units[index].count++;
