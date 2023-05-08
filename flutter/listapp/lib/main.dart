@@ -422,8 +422,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         child: const Text('Close'),
                                         onPressed: () {
-                                          Navigator.of(context).pop();
-                                          updateListWidget(gamename, facname);
+                                          setState(() {
+                                            Navigator.of(context).pop();
+                                            updateListWidget(gamename, facname);
+                                          });
                                         },
                                       ),
                                       SizedBox(
