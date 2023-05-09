@@ -271,7 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     return const Center(child: Text("Loading"));
                   }
                   final data = snapshot.data;
-
+                  //Returns the list of factions
                   return ListView.builder(
                     itemCount: data?.size,
                     itemBuilder: (BuildContext context, int index) {
@@ -334,8 +334,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Text("units in $facname\n"),
         Center(
           child: ConstrainedBox(
-            constraints:
-                BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            constraints: const BoxConstraints(maxWidth: 600),
             child: SizedBox(
               height: ((MediaQuery.of(context).size.height) / 10) * 4,
               child: StreamBuilder<QuerySnapshot>(
@@ -358,13 +357,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         return Center(
                             child: ListTile(
                                 key: Key(data.docs[index]['name']),
-                                title: Center(
-                                    child: RichText(
-                                        //Color for the text suddenly became red without this line.
-                                        selectionColor: Colors.black,
-                                        text: TextSpan(
-                                            text: widget.units[index]
-                                                .toString()))),
+                                title: RichText(
+                                    //Color for the text suddenly became red without this line.
+                                    selectionColor: Colors.black,
+                                    text: TextSpan(
+                                        text: widget.units[index].toString())),
                                 onTap: () => {
                                       setState(() {
                                         addUnit(index);
@@ -381,8 +378,7 @@ class _MyHomePageState extends State<MyHomePage> {
         const Text("Currently Selected Units"),
         Center(
           child: ConstrainedBox(
-            constraints:
-                BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 2),
+            constraints: const BoxConstraints(maxWidth: 600),
             child: SizedBox(
               height: ((MediaQuery.of(context).size.height) / 10) * 2.5,
               child: ListView.builder(
@@ -391,10 +387,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Center(
                       child: ListTile(
                     hoverColor: const Color.fromARGB(255, 233, 107, 98),
-                    title: Center(
-                      child: RichText(
-                          text: TextSpan(text: widget.list[index].toString())),
-                    ),
+                    title: RichText(
+                        text: TextSpan(text: widget.list[index].toString())),
                     //Removing the clicked unit from the list, above hover color is red as a warning.
                     onTap: () => {
                       setState(() {
@@ -472,7 +466,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  //Adds a unit to the list if it is within point threshold, meant to alert the user
+  //Adds a unit to the list if it is within point threshold
+  //alerts the user if it is not a valid addition
   addUnit(int index) {
     if (widget.points + widget.units[index].points > widget.limit) {
       showDialog(
@@ -601,6 +596,7 @@ class AddtoDB extends StatefulWidget {
 class _AddtoDB extends State<AddtoDB> {
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     var db = FirebaseFirestore.instance;
     return const Scaffold();
   }
